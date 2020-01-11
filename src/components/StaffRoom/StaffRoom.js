@@ -16,7 +16,11 @@ class StaffRoom extends React.Component {
   }
 
   printEmployees = () => {
-    this.setState({ employees: employeeData.getAllEmployees() });
+    employeeData.getAllEmployees()
+      .then((employees) => {
+        this.setState({ employees });
+      })
+      .catch((errFromGettingEmployees) => console.error({ errFromGettingEmployees }));
   }
 
   render() {
