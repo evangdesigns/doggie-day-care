@@ -5,7 +5,7 @@ const dogShape = PropTypes.shape({
   imageUrl: PropTypes.string,
   name: PropTypes.string.isRequired,
   owner: PropTypes.string,
-  decription: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 });
 
 export default { dogShape };
