@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Dog from '../Dog/Dog';
-
 import dogData from '../../helpers/data/dogsData';
 
 import './DogPen.scss';
@@ -16,7 +15,11 @@ class DogPen extends React.Component {
   }
 
   printDogs = () => {
-    this.setState({ dogs: dogData.getAllDogs() });
+    dogData.getAllDogs()
+      .then((dogs) => {
+        this.setState({ dogs });
+      })
+      .catch((errFromGettingDogs) => console.error({ errFromGettingDogs }));
   }
 
   render() {
