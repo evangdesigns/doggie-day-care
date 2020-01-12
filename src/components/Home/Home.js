@@ -10,9 +10,13 @@ import walkData from '../../helpers/data/walkData';
 
 class Home extends React.Component {
   componentDidMount() {
-    this.printDogs();
-    this.printEmployees();
-    this.printWalks();
+    this.printDogs()
+      .then(() => {
+        this.printEmployees()
+          .then(() => {
+            this.printWalks();
+          });
+      });
   }
 
   state = {
@@ -21,37 +25,40 @@ class Home extends React.Component {
     walks: [],
   }
 
-  printDogs = () => {
-    dogData.getAllDogs()
-      .then((dogs) => {
-        this.setState({ dogs });
-      })
-      .catch((errFromGettingDogs) => console.error({ errFromGettingDogs }));
-  }
+  printDogs = () => dogData.getAllDogs()
+    .then((dogs) => {
+      this.setState({ dogs });
+    })
+    .catch((errFromGettingDogs) => console.error({ errFromGettingDogs }));
 
-  printEmployees = () => {
-    employeeData.getAllEmployees()
-      .then((employees) => {
-        this.setState({ employees });
-      })
-      .catch((errFromGettingEmployees) => console.error({ errFromGettingEmployees }));
-  }
+  printEmployees = () => employeeData.getAllEmployees()
+    .then((employees) => {
+      this.setState({ employees });
+    })
+    .catch((errFromGettingEmployees) => console.error({ errFromGettingEmployees }));
 
-  printWalks = () => {
-    walkData.getAllWalks()
-      .then((walks) => {
-        this.setState({ walks });
+  printWalks = () => walkData.getAllWalks()
+    .then((walks) => {
+      this.setState({ walks });
+    })
+    .catch((errFromGettingWalks) => console.error({ errFromGettingWalks }));
+
+  deleteWalk = (walkId) => {
+    walkData.deleteWalk(walkId)
+      .then(() => {
+        this.printWalks();
       })
-      .catch((errFromGettingWalks) => console.error({ errFromGettingWalks }));
+      .catch((errorFromDeleteWalks) => console.error({ errorFromDeleteWalks }));
   }
 
   render() {
-    const { dogs, employees, walks } = this.state;
+    const { walks, dogs, employees } = this.state;
+
     return (
       <div>
         <DogPen dogs={dogs} />
         <StaffRoom employees={employees} />
-        <WalkBoard walks={walks} dogs={dogs} employees={employees} />
+        <WalkBoard dogs={dogs} employees={employees} walks={walks} deleteWalk={this.deleteWalk} />
       </div>);
   }
 }
