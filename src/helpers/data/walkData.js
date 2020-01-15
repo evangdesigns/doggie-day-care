@@ -24,4 +24,6 @@ const getAllWalks = () => new Promise((resolve, reject) => {
 
 const deleteWalk = (walkId) => axios.delete(`${baseUrl}/walks/${walkId}.json`);
 
-export default { getAllWalks, deleteWalk };
+const addWalk = (newWalk) => axios.post(`${baseUrl}/walks.json`, newWalk);
+
+export default { getAllWalks, deleteWalk, addWalk };

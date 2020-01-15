@@ -23,6 +23,7 @@ class Home extends React.Component {
     dogs: [],
     employees: [],
     walks: [],
+    showWalkForm: false,
   }
 
   printDogs = () => dogData.getAllDogs()
@@ -51,6 +52,14 @@ class Home extends React.Component {
       .catch((errorFromDeleteWalks) => console.error({ errorFromDeleteWalks }));
   }
 
+  addWalk = (newWalk) => {
+    walkData.addWalk(newWalk)
+      .then(() => {
+        this.printWalks();
+      })
+      .catch((errorFromAddWalks) => console.error({ errorFromAddWalks }));
+  }
+
   render() {
     const { walks, dogs, employees } = this.state;
 
@@ -58,7 +67,7 @@ class Home extends React.Component {
       <div>
         <DogPen dogs={dogs} />
         <StaffRoom employees={employees} />
-        <WalkBoard dogs={dogs} employees={employees} walks={walks} deleteWalk={this.deleteWalk} />
+        <WalkBoard dogs={dogs} employees={employees} walks={walks} deleteWalk={this.deleteWalk} addWalk={this.addWalk} />
       </div>);
   }
 }
