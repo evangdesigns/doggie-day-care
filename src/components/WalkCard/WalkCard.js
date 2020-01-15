@@ -25,7 +25,7 @@ class WalkCard extends React.Component {
   render() {
     const { walk, dogs, employees } = this.props;
     const foundDog = dogs.find((dog) => dog.id === walk.dogId);
-    const foundSlave = employees.find((employee) => employee.id === walk.employeeId);
+    const foundEmployee = employees.find((employee) => employee.id === walk.employeeId);
 
     return (
     <div className="WalkCard col-3">
@@ -33,7 +33,7 @@ class WalkCard extends React.Component {
         <button className="btn btn-danger float-right" onClick={this.deleteWalkEvent}>X</button>
         <div className="card-body">
           <h5 className="card-title">{foundDog.name}</h5>
-          <p>{foundSlave.firstName} {foundSlave.lastName}</p>
+          <p>{foundEmployee.firstName} {foundEmployee.lastName}</p>
           <p><strong>{walk.date}</strong></p>
         </div>
       </div>
