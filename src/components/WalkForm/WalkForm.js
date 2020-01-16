@@ -1,16 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import authData from '../../helpers/data/authData';
+import walkShape from '../../helpers/propz/walkShape';
 
 class WalkForm extends React.Component {
   static propTypes = {
+    walkToEdit: walkShape.walkShape,
     addWalk: PropTypes.func,
+    editMode: PropTypes.bool,
+    updateWalkInfo: PropTypes.func,
   }
 
   state = {
     walkDog: '',
     walkEmployee: '',
     walkDate: '',
+  }
+
+  componentDidMount() {
+    const { walkToEdit, editMode } = this.props;
+    if (editMode) {
+      this.setState({ walkDog: walkToEdit.dogId, walkEmployee: walkToEdit.employeeId, walkDate: walkToEdit.date });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if ((prevProps.walkToEdit.id !== this.props.walkToEdit.id) && this.props.editMode) {
+      this.setState({ walkDog: this.props.walkToEdit.dogId, walkEmployee: this.props.walkToEdit.employeeId, walkDate: this.props.walkToEdit.date });
+    }
   }
 
   saveWalkEvent = (e) => {
@@ -23,6 +40,19 @@ class WalkForm extends React.Component {
       uid: authData.getUid(),
     };
     addWalk(newWalk);
+    this.setState({ walkDog: '', walkEmployee: '', walkDate: '' });
+  }
+
+  updateWalkEvent = (e) => {
+    e.preventDefault();
+    const { updateWalkInfo, walkToEdit } = this.props;
+    const updatedWalk = {
+      dogId: this.state.walkDog,
+      employeeId: this.state.walkEmployee,
+      date: this.state.walkDate,
+      uid: authData.getUid(),
+    };
+    updateWalkInfo(walkToEdit.id, updatedWalk);
     this.setState({ walkDog: '', walkEmployee: '', walkDate: '' });
   }
 
@@ -42,7 +72,7 @@ class WalkForm extends React.Component {
   }
 
   render() {
-    const { dogs, employees } = this.props;
+    const { dogs, employees, editMode } = this.props;
     const printDogNames = dogs.map((dog) => <option key={dog.id} value={dog.id}>{dog.name}</option>);
     const printEmployeeNames = employees.map((employee) => <option key={employee.id} value={employee.id}>{employee.firstName} {employee.lastName}</option>);
     return (
@@ -77,7 +107,10 @@ class WalkForm extends React.Component {
       onChange={this.dateChange}
     />
   </div>
-  <button className="btn btn-secondary" onClick={this.saveWalkEvent}>SAVE WALK</button>
+  {
+  (editMode) ? (<button className="btn btn-warning" onClick={this.updateWalkEvent}>UPDATE WALK</button>)
+    : (<button className="btn btn-secondary" onClick={this.saveWalkEvent}>SAVE WALK</button>)
+  }
     </form>
     );
   }
