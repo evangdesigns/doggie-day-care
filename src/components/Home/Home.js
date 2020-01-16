@@ -60,6 +60,14 @@ class Home extends React.Component {
       .catch((errorFromAddWalks) => console.error({ errorFromAddWalks }));
   }
 
+  updateWalkInfo = (walkId, updatedWalk) => {
+    walkData.updateWalk(walkId, updatedWalk)
+      .then(() => {
+        this.printWalks();
+      })
+      .catch((errorFromUpdateWalk) => console.error({ errorFromUpdateWalk }));
+  }
+
   render() {
     const { walks, dogs, employees } = this.state;
 
@@ -67,7 +75,7 @@ class Home extends React.Component {
       <div>
         <DogPen dogs={dogs} />
         <StaffRoom employees={employees} />
-        <WalkBoard dogs={dogs} employees={employees} walks={walks} deleteWalk={this.deleteWalk} addWalk={this.addWalk} />
+        <WalkBoard dogs={dogs} employees={employees} walks={walks} deleteWalk={this.deleteWalk} addWalk={this.addWalk} updateWalkInfo={this.updateWalkInfo}/>
       </div>);
   }
 }

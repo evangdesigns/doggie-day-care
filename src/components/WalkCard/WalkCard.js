@@ -14,12 +14,22 @@ class WalkCard extends React.Component {
     dog: dogShape.dogShape,
     employee: employeeShape.employeeShape,
     deleteWalk: PropTypes.func,
+    setEditMode: PropTypes.func,
+    setWalkToEdit: PropTypes.func,
+
   }
 
   deleteWalkEvent = (e) => {
     e.preventDefault();
     const { deleteWalk, walk } = this.props;
     deleteWalk(walk.id);
+  }
+
+  setEditMode = (e) => {
+    const { setEditMode, setWalkToEdit, walk } = this.props;
+    e.preventDefault();
+    setEditMode(true);
+    setWalkToEdit(walk);
   }
 
   render() {
@@ -35,6 +45,7 @@ class WalkCard extends React.Component {
           <h5 className="card-title">{foundDog.name}</h5>
           <p>{foundEmployee.firstName} {foundEmployee.lastName}</p>
           <p><strong>{walk.date}</strong></p>
+          <button className="btn btn-primary" onClick={this.setEditMode}>Update Walk</button>
         </div>
       </div>
     </div>

@@ -16,10 +16,21 @@ class WalkBoard extends React.Component {
     deleteWalk: PropTypes.func,
     addWalk: PropTypes.func,
     showWalkForm: PropTypes.func,
+    updateWalk: PropTypes.func,
   }
 
   state = {
+    editMode: false,
     showWalkForm: false,
+    walkToEdit: {},
+  }
+
+  setEditMode = (editMode) => {
+    this.setState({ editMode, showWalkForm: true });
+  }
+
+  setWalkToEdit = (walk) => {
+    this.setState({ walkToEdit: walk });
   }
 
   setShowWalkForm = (e) => {
@@ -27,21 +38,23 @@ class WalkBoard extends React.Component {
   }
 
   render() {
+    const { editMode } = this.state;
     const {
       walks,
       dogs,
       employees,
       deleteWalk,
       addWalk,
+      updateWalkInfo,
     } = this.props;
 
     return (
       <div className="WalkBoard">
         <h1>Walks</h1>
-        <button className="btn btn-primary" onClick={this.setShowWalkForm}>ADD WALK</button>
-      { this.state.showWalkForm && <WalkForm dogs={dogs} employees={employees} addWalk={addWalk}/> }
+        { (editMode) ? (<div></div>) : (<button className="btn btn-primary" onClick={this.setShowWalkForm}>ADD WALK</button>) }
+      { this.state.showWalkForm && <WalkForm dogs={dogs} employees={employees} addWalk={addWalk} editMode={editMode} walkToEdit={this.state.walkToEdit} updateWalkInfo={updateWalkInfo}/> }
         <div className="d-flex flex-wrap justify-content-center">
-        { walks.map((walk) => (<WalkCard key={walk.id} walk={walk} dogs={dogs} employees={employees} deleteWalk={deleteWalk} />))}
+        { walks.map((walk) => (<WalkCard key={walk.id} walk={walk} dogs={dogs} employees={employees} deleteWalk={deleteWalk} setEditMode={this.setEditMode} setWalkToEdit={this.setWalkToEdit}/>))}
         </div>
       </div>
     );
